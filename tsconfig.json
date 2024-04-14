@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@common/*": ["src/common/*"],
+      "@media/*": ["src/media/*"],
+      "@mail/*": ["src/mail/*"],
+      "@auth/*": ["src/auth/*"],
+      "@customer/*": ["src/customer/*"],
+      "@seeds/*": ["src/seeds/*"],
+      "@i18n/*": ["src/i18n/*"],
+      "@booking/*": ["src/booking/*"],
+      "@product/*": ["src/product/*"],
+      "@cart/*": ["src/cart/*"],
+      "@staff/*": ["src/staff/*"],
+      "@category/*": ["src/category/*"],
+      "@order/*": ["src/order/*"],
+      "@task/*": ["src/task/*"],
+      "@provider/*": ["src/provider/*"],
+      "@analytic/*": ["src/analytic/*"],
+      "@payment/*": ["src/payment/*"],
+      "@src/*": ["src/*"]
+    }
+  }
+}
