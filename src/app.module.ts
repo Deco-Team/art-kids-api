@@ -81,35 +81,35 @@ import { PaymentModule } from '@payment/payment.module'
         path: 'auth',
         module: AuthModule
       },
-      {
-        path: 'customers',
-        module: CustomerModule
-      },
-      {
-        path: 'products',
-        module: ProductModule
-      },
-      {
-        path: 'categories',
-        module: CategoryModule
-      },
-      {
-        path: 'orders',
-        module: OrderModule
-      }
+      // {
+      //   path: 'customers',
+      //   module: CustomerModule
+      // },
+      // {
+      //   path: 'products',
+      //   module: ProductModule
+      // },
+      // {
+      //   path: 'categories',
+      //   module: CategoryModule
+      // },
+      // {
+      //   path: 'orders',
+      //   module: OrderModule
+      // }
     ]),
     CommonModule,
     AuthModule,
     CustomerModule,
     StaffModule,
     ProviderModule,
-    ProductModule,
-    CartModule,
-    CategoryModule,
-    OrderModule,
-    TaskModule,
-    AnalyticModule,
-    PaymentModule
+    // ProductModule,
+    // CartModule,
+    // CategoryModule,
+    // OrderModule,
+    // TaskModule,
+    // AnalyticModule,
+    // PaymentModule
   ],
   controllers: [AppController],
   providers: [AppService]
