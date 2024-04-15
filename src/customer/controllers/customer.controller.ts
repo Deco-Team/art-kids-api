@@ -3,18 +3,17 @@ import { ApiBadRequestResponse, ApiBearerAuth, ApiOkResponse, ApiOperation, ApiT
 import * as _ from 'lodash'
 
 import { CustomerService } from '@customer/services/customer.service'
-import { Customer } from '@customer/schemas/customer.schema'
 import { ErrorResponse } from '@common/contracts/dto'
-import { Roles } from '@auth/decorators/roles.decorator'
-import { UserRole } from '@common/contracts/constant'
+import { UserSide } from '@common/contracts/constant'
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard'
-import { RolesGuard } from '@auth/guards/roles.guard'
 import { CustomerResponseDto } from '@customer/dto/customer.dto'
+import { Sides } from '@auth/decorators/sides.decorator'
+import { SidesGuard } from '@auth/guards/sides.guard'
 
 @ApiTags('Customer')
 @ApiBearerAuth()
-@Roles(UserRole.CUSTOMER)
-@UseGuards(JwtAuthGuard.ACCESS_TOKEN, RolesGuard)
+@Sides(UserSide.CUSTOMER)
+@UseGuards(JwtAuthGuard.ACCESS_TOKEN, SidesGuard)
 @Controller()
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}

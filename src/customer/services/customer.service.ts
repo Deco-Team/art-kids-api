@@ -16,7 +16,6 @@ export class CustomerService {
           $ne: Status.DELETED
         }
       },
-      projection: '-password'
     })
     if (!customer) throw new BadRequestException(Errors.CUSTOMER_NOT_FOUND.message)
     return customer

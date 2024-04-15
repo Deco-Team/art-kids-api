@@ -19,9 +19,10 @@ import { StaffModule } from '@staff/staff.module'
 import { CategoryModule } from '@category/category.module'
 import { OrderModule } from '@order/order.module'
 import { ProviderModule } from '@provider/provider.module'
-import { TaskModule } from '@task/task.module'
 import { AnalyticModule } from '@analytic/analytic.module'
 import { PaymentModule } from '@payment/payment.module'
+import { AdminModule } from '@admin/admin.module'
+import { TokenModule } from '@token/token.module'
 
 @Module({
   imports: [
@@ -81,10 +82,10 @@ import { PaymentModule } from '@payment/payment.module'
         path: 'auth',
         module: AuthModule
       },
-      // {
-      //   path: 'customers',
-      //   module: CustomerModule
-      // },
+      {
+        path: 'customers',
+        module: CustomerModule
+      },
       // {
       //   path: 'products',
       //   module: ProductModule
@@ -103,11 +104,12 @@ import { PaymentModule } from '@payment/payment.module'
     CustomerModule,
     StaffModule,
     ProviderModule,
+    AdminModule,
+    TokenModule,
     // ProductModule,
     // CartModule,
     // CategoryModule,
     // OrderModule,
-    // TaskModule,
     // AnalyticModule,
     // PaymentModule
   ],

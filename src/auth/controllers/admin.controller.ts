@@ -8,9 +8,9 @@ import { AuthService } from "@auth/services/auth.service"
 import { DataResponse } from "@common/contracts/openapi-builder"
 import { JwtAuthGuard } from "@auth/guards/jwt-auth.guard"
 
-@ApiTags('Auth - Provider')
-@Controller('provider')
-export class AuthProviderController {
+@ApiTags('Auth - Admin')
+@Controller('admin')
+export class AuthAdminController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
@@ -18,7 +18,7 @@ export class AuthProviderController {
   @ApiOkResponse({ type: DataResponse(TokenResDto) })
   @ApiBadRequestResponse({ type: ErrorResponse })
   async login(@Body() loginReqDto: LoginReqDto): Promise<TokenResDto> {
-    return await this.authService.login(loginReqDto, UserSide.PROVIDER)
+    return await this.authService.login(loginReqDto, UserSide.ADMIN)
   }
 
   @UseGuards(JwtAuthGuard.REFRESH_TOKEN)

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { ApiProperty } from '@nestjs/swagger'
-import { Status } from '@src/common/contracts/constant'
+import { Gender, Status } from '@src/common/contracts/constant'
 import { Transform } from 'class-transformer'
 import { HydratedDocument } from 'mongoose'
 import * as paginate from 'mongoose-paginate-v2'
@@ -43,20 +43,45 @@ export class Provider {
   })
   phone: string
 
+  @Prop({ type: String, select: false })
+  password: string
+
   @ApiProperty()
-  @Prop({
-    type: String,
-    required: true
-  })
-  address: string
+  @Prop({ enum: Gender, default: Gender.OTHER })
+  gender: Gender
 
   @Prop({
     enum: Status,
     default: Status.ACTIVE
   })
   status: Status
+
+  @ApiProperty()
+  @Prop({
+    type: String
+  })
+  image?: string
+
+  @ApiProperty()
+  @Prop({
+    type: String
+  })
+  introduction?: string
+
+  @ApiProperty()
+  @Prop({
+    type: String
+  })
+  education?: string
+
+  @ApiProperty()
+  @Prop({
+    type: String
+  })
+  expertise?: string
 }
 
 export const ProviderSchema = SchemaFactory.createForClass(Provider)
 
 ProviderSchema.plugin(paginate)
+ProviderSchema.index({ email: 1 })
