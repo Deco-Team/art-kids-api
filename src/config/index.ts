@@ -2,7 +2,7 @@
  * ENV
  */
 export default () => ({
-  mongodbUrl: process.env.MONGODB_CONNECTION_STRING || 'mongodb://localhost:27017/efurniture',
+  mongodbUrl: process.env.MONGODB_CONNECTION_STRING || 'mongodb://localhost:27017/art-kids-db',
   mail: {
     SMTP_USERNAME: process.env.SMTP_USERNAME,
     SMTP_PASSWORD: process.env.SMTP_PASSWORD,
@@ -29,22 +29,12 @@ export default () => ({
   JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || 'accessSecret',
   JWT_ACCESS_EXPIRATION: process.env.JWT_ACCESS_EXPIRATION || 864000, // seconds
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'refreshSecret',
-  JWT_REFRESH_EXPIRATION: Number(process.env.JWT_REFRESH_EXPIRATION) || 90, // 90 days
+  JWT_REFRESH_EXPIRATION: process.env.JWT_REFRESH_EXPIRATION || '90d', // 90 days
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-  WEB_URL: process.env.WEB_URL || 'https://www.furnique.tech',
-  SERVER_URL: process.env.SERVER_URL || 'https://api.furnique.tech'
+  WEB_URL: process.env.WEB_URL || 'https://www.fptuhcm-capstone.tech',
+  SERVER_URL: process.env.SERVER_URL || 'https://api.fptuhcm-capstone.tech'
 })
-
-export const AuthRoles = {
-  CUSTOMER: 'CUSTOMER',
-  USER: 'user'
-}
-
-export const Sides = {
-  CUSTOMER: 'customer',
-  USER: 'user'
-}
 
 /**
  * REGEX

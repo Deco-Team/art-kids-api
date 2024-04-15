@@ -8,7 +8,7 @@ import { StaffService } from '@staff/services/staff.service'
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: Staff.name, schema: StaffSchema }]), ProviderModule],
-  controllers: [StaffController],
+  // controllers: [StaffController],
   providers: [StaffService, StaffRepository],
   exports: [StaffService, StaffRepository]
 })

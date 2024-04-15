@@ -1,28 +1,27 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ApiProperty } from '@nestjs/swagger'
+import { Status, UserRole } from '@src/common/contracts/constant'
+import { Transform } from 'class-transformer'
 import { HydratedDocument } from 'mongoose'
 import * as paginate from 'mongoose-paginate-v2'
-import { ApiProperty } from '@nestjs/swagger'
-import { Transform } from 'class-transformer'
-import { Gender, Status } from '@common/contracts/constant'
 
-export type CustomerDocument = HydratedDocument<Customer>
+export type AdminDocument = HydratedDocument<Admin>
 
 @Schema({
-  collection: 'customers',
-  timestamps: {
-    createdAt: true,
-    updatedAt: true
-  },
+  collection: 'admins',
+  timestamps: true,
   toJSON: {
     transform(doc, ret) {
       delete ret.__v
     }
   }
 })
-export class Customer {
+export class Admin {
   constructor(id?: string) {
     this._id = id
   }
+
+  @ApiProperty()
   @Transform(({ value }) => value?.toString())
   _id: string
 
@@ -37,12 +36,6 @@ export class Customer {
   })
   email: string
 
-  @ApiProperty()
-  @Prop({
-    type: String
-  })
-  phone: string
-
   @Prop({ type: String, select: false })
   password: string
 
@@ -52,18 +45,14 @@ export class Customer {
   })
   status: Status
 
-  @ApiProperty()
-  @Prop({ type: Date })
-  dateOfBirth?: Date
-
-  @ApiProperty()
   @Prop({
-    type: String
+    enum: UserRole,
+    default: UserRole.STAFF
   })
-  image?: string
+  role: UserRole
 }
 
-export const CustomerSchema = SchemaFactory.createForClass(Customer)
+export const AdminSchema = SchemaFactory.createForClass(Admin)
 
-CustomerSchema.plugin(paginate)
-CustomerSchema.index({ email: 1 })
+AdminSchema.plugin(paginate)
+AdminSchema.index({ email: 1 })

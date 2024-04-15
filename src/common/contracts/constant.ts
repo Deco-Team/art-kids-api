@@ -4,6 +4,27 @@ export enum Status {
   DELETED = 'DELETED'
 }
 
+export enum UserSide {
+  CUSTOMER = 'CUSTOMER',
+  PROVIDER = 'PROVIDER',
+  ADMIN = 'ADMIN'
+}
+
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  STAFF = 'STAFF',
+  DELIVERY_STAFF = 'DELIVERY_STAFF',
+  CONSULTANT_STAFF = 'CONSULTANT_STAFF',
+  CUSTOMER = 'CUSTOMER'
+}
+
+export enum StaffRole {
+  STAFF = 'STAFF',
+  DELIVERY_STAFF = 'DELIVERY_STAFF',
+  CONSULTANT_STAFF = 'CONSULTANT_STAFF'
+}
+
+
 export enum ProductStatus {
   ACTIVE = 'ACTIVE',
   OUT_OF_STOCK = 'OUT_OF_STOCK',
@@ -27,25 +48,6 @@ export enum TransactionStatus {
   CANCELED = 'CANCELED',
   DELETED = 'DELETED',
   REFUNDED = 'REFUNDED'
-}
-
-export enum UserSide {
-  CUSTOMER = 'CUSTOMER',
-  PROVIDER = 'PROVIDER'
-}
-
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  STAFF = 'STAFF',
-  DELIVERY_STAFF = 'DELIVERY_STAFF',
-  CONSULTANT_STAFF = 'CONSULTANT_STAFF',
-  CUSTOMER = 'CUSTOMER'
-}
-
-export enum StaffRole {
-  STAFF = 'STAFF',
-  DELIVERY_STAFF = 'DELIVERY_STAFF',
-  CONSULTANT_STAFF = 'CONSULTANT_STAFF'
 }
 
 export enum Gender {

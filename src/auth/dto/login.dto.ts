@@ -10,9 +10,3 @@ export class LoginReqDto {
     @IsNotEmpty()
     password: string;
 }
-
-export class GoogleLoginReqDto {
-    @ApiProperty()
-    @IsNotEmpty()
-    token: string;
-}
