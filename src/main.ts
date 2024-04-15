@@ -9,7 +9,6 @@ import { AppValidationPipe } from '@common/pipes/app-validate.pipe'
 import { TrimRequestBodyPipe } from '@common/pipes/trim-req-body.pipe'
 
 async function bootstrap() {
-  console.log(1)
   const app = await NestFactory.create(AppModule)
   
   const logger = app.get(AppLogger)
@@ -51,7 +50,7 @@ async function bootstrap() {
   }
 
   // Example: process.env.CORS_VALID_ORIGINS=localhost,ngrok-free => parse to [ /localhost/, /ngrok-free/ ]
-  const origins = process.env.CORS_VALID_ORIGINS.split(',').map((origin) => new RegExp(origin)) || [
+  const origins = process.env.CORS_VALID_ORIGINS?.split(',')?.map((origin) => new RegExp(origin)) || [
     /localhost/,
     /ngrok-free/
   ]
