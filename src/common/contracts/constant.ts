@@ -32,6 +32,24 @@ export enum ProductStatus {
   DELETED = 'DELETED'
 }
 
+export enum CourseLevel {
+  EASY = 'EASY',
+  MEDIUM = 'MEDIUM',
+  HARD = 'HARD'
+}
+
+export enum CourseStatus {
+  PENDING = 'PENDING',
+  PUBLISHED = 'PUBLISHED',
+  REJECTED = 'REJECTED',
+  DELETED = 'DELETED'
+}
+
+export enum LessonType {
+  TRIAL = 'TRIAL',
+  FEE = 'FEE'
+}
+
 export enum OrderStatus {
   PENDING = 'PENDING',
   CONFIRMED = 'CONFIRMED',
