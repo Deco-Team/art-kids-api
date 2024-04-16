@@ -14,9 +14,6 @@ export class Lesson {
   @Prop({ type: String })
   title: string
 
-  @Prop({ type: String, slug: 'title', unique: true })
-  slug: string
-
   @Prop({ type: String })
   description: string
 

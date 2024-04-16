@@ -22,6 +22,7 @@
       "@media/*": ["src/media/*"],
       "@mail/*": ["src/mail/*"],
       "@auth/*": ["src/auth/*"],
+      "@course/*": ["src/course/*"],
       "@customer/*": ["src/customer/*"],
       "@admin/*": ["src/admin/*"],
       "@token/*": ["src/token/*"],

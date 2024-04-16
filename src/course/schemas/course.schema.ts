@@ -60,15 +60,18 @@ export class Course {
   })
   lessons: Lesson[]
 
-//   @Prop({
-//     type: String
-//   })
-//   instructor: string
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'Provider'
+  })
+  providerId: string
 }
 
 export type CourseDocument = HydratedDocument<Course>
 
 export const CourseSchema = SchemaFactory.createForClass(Course)
+
+CourseSchema.index({ title: 'text' })
 
 CourseSchema.plugin(paginate)
 CourseSchema.plugin(slug)
