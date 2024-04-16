@@ -115,5 +115,10 @@ export const Errors: Record<string, ErrorResponse> = {
     error: 'VISIT_SHOWROOM_BOOKING_NOT_FOUND',
     message: 'Không tìm thấy lịch tham quan showroom. Vui lòng thử lại',
     httpStatus: HttpStatus.BAD_REQUEST
+  },
+  COURSE_EXISTED: {
+    error: 'COURSE_EXISTED',
+    message: 'Khóa học đã tồn tại',
+    httpStatus: HttpStatus.BAD_REQUEST
   }
 }

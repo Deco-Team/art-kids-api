@@ -23,6 +23,7 @@ import { AnalyticModule } from '@analytic/analytic.module'
 import { PaymentModule } from '@payment/payment.module'
 import { AdminModule } from '@admin/admin.module'
 import { TokenModule } from '@token/token.module'
+import { CourseModule } from './course/course.module'
 
 @Module({
   imports: [
@@ -86,6 +87,10 @@ import { TokenModule } from '@token/token.module'
         path: 'customers',
         module: CustomerModule
       },
+      {
+        path: 'courses',
+        module: CourseModule
+      }
       // {
       //   path: 'products',
       //   module: ProductModule
@@ -106,6 +111,7 @@ import { TokenModule } from '@token/token.module'
     ProviderModule,
     AdminModule,
     TokenModule,
+    CourseModule
     // ProductModule,
     // CartModule,
     // CategoryModule,
