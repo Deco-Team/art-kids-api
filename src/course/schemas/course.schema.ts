@@ -65,6 +65,9 @@ export class Course {
     ref: 'Provider'
   })
   provider: string
+
+  @Prop({ type: String, required: false })
+  rejectReason?: string
 }
 
 export type CourseDocument = HydratedDocument<Course>

@@ -95,6 +95,10 @@ export class CourseDto {
   @ApiProperty()
   @IsMongoId()
   provider: string
+
+  @ApiProperty()
+  @IsString()
+  rejectReason?: string
 }
 
 export class CreateLessonDto extends PickType(LessonDto, [
