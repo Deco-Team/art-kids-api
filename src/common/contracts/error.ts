@@ -120,5 +120,10 @@ export const Errors: Record<string, ErrorResponse> = {
     error: 'COURSE_EXISTED',
     message: 'Khóa học đã tồn tại',
     httpStatus: HttpStatus.BAD_REQUEST
+  },
+  COURSE_NOT_FOUND: {
+    error: 'COURSE_NOT_FOUND',
+    message: 'Không tìm thấy khoá học',
+    httpStatus: HttpStatus.BAD_REQUEST
   }
 }
