@@ -12,37 +12,27 @@ import { PaginationQuery } from '@common/contracts/dto'
 import { Pagination, PaginationParams } from '@common/decorators/pagination.decorator'
 import { ParseObjectIdPipe } from '@common/pipes/parse-object-id.pipe'
 
-@ApiTags('Course - Provider')
+@ApiTags('Course - Customer')
 @ApiBearerAuth()
-@Sides(UserSide.PROVIDER)
+@Sides(UserSide.CUSTOMER)
 @UseGuards(JwtAuthGuard.ACCESS_TOKEN, SidesGuard)
-@Controller('provider')
-export class ProviderCourseController {
+@Controller('customer')
+export class CustomerCourseController {
   constructor(private readonly courseService: CourseService) {}
 
   @Get()
   @ApiOkResponse({ type: DataResponse(CoursePaginateDto) })
   @ApiQuery({ type: PaginationQuery })
-  getCourses(@Request() req, @Pagination() paginationParams: PaginationParams) {
-    const providerId = getObjectPropValue(req, 'user._id')
+  getCourses(@Pagination() paginationParams: PaginationParams) {
     const filter = {}
 
-    return this.courseService.getCoursesByProvider(filter, paginationParams, providerId)
+    return this.courseService.getCoursesByCustomer(filter, paginationParams)
   }
 
   @Get(':id')
   @ApiOkResponse({ type: DataResponse(CourseDto) })
   @ApiParam({ name: 'id' })
-  getCourseDetails(@Request() req, @Param('id', ParseObjectIdPipe) id: string) {
-    const providerId = getObjectPropValue(req, 'user._id')
-
-    return this.courseService.getCourseDetailByProvider(id, providerId)
-  }
-
-  @Post()
-  @ApiCreatedResponse({ type: DataResponse(CourseDto) })
-  createProduct(@Request() req, @Body() createCourseDto: CreateCourseDto) {
-    const providerId = getObjectPropValue(req, 'user._id')
-    return this.courseService.createCourse(createCourseDto, providerId)
+  getCourseDetails(@Param('id', ParseObjectIdPipe) id: string) {
+    return this.courseService.getCourseDetailByCustomer(id)
   }
 }

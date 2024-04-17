@@ -12,7 +12,7 @@ import { CourseStatus } from '@common/contracts/constant'
 export class CourseService {
   constructor(private readonly courseRepository: CourseRepository) {}
 
-  public async getProviderCourses(filter: FilterQuery<Course>, paginationParams: PaginationParams, providerId: string) {
+  public async getCoursesByProvider(filter: FilterQuery<Course>, paginationParams: PaginationParams, providerId: string) {
     return await this.courseRepository.paginate(
       {
         ...filter,
@@ -27,7 +27,7 @@ export class CourseService {
     )
   }
 
-  public async getProviderCourseDetails(courseId: string, providerId: string) {
+  public async getCourseDetailByProvider(courseId: string, providerId: string) {
     const result = await this.courseRepository.findOne({
       conditions: {
         _id: courseId,
@@ -35,6 +35,35 @@ export class CourseService {
           $ne: CourseStatus.DELETED
         },
         providerId
+      }
+    })
+    if (!result) throw new AppException(Errors.COURSE_NOT_FOUND)
+    return result
+  }
+
+  public async getCoursesByCustomer(filter: FilterQuery<Course>, paginationParams: PaginationParams) {
+    return await this.courseRepository.paginate(
+      {
+        ...filter,
+        // status: CourseStatus.PUBLISHED,
+        status: {
+          $ne: CourseStatus.DELETED
+        },
+      },
+      {
+        ...paginationParams
+      }
+    )
+  }
+
+  public async getCourseDetailByCustomer(courseId: string) {
+    const result = await this.courseRepository.findOne({
+      conditions: {
+        _id: courseId,
+        // status: CourseStatus.PUBLISHED,
+        status: {
+          $ne: CourseStatus.DELETED
+        },
       }
     })
     if (!result) throw new AppException(Errors.COURSE_NOT_FOUND)
