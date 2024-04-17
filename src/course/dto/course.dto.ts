@@ -1,4 +1,5 @@
 import { CourseLevel, CourseStatus, LessonType } from '@common/contracts/constant'
+import { PaginateResponse } from '@common/contracts/openapi-builder'
 import { ApiProperty, PickType } from '@nestjs/swagger'
 import {
   ArrayMaxSize,
@@ -92,7 +93,15 @@ export class CourseDto {
   providerId: string
 }
 
-export class CreateLessonDto extends PickType(LessonDto, ['title', 'description', 'objective', 'video', 'type'] as const) {}
+export class CoursePaginateDto extends PaginateResponse(CourseDto) {}
+
+export class CreateLessonDto extends PickType(LessonDto, [
+  'title',
+  'description',
+  'objective',
+  'video',
+  'type'
+] as const) {}
 
 export class CreateCourseDto extends PickType(CourseDto, [
   'title',
