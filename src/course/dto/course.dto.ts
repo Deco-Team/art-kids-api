@@ -1,6 +1,6 @@
 import { CourseLevel, CourseStatus, LessonType } from '@common/contracts/constant'
 import { PaginateResponse } from '@common/contracts/openapi-builder'
-import { ApiProperty, PickType } from '@nestjs/swagger'
+import { ApiProperty, OmitType, PickType } from '@nestjs/swagger'
 import {
   ArrayMaxSize,
   ArrayMinSize,
@@ -74,11 +74,15 @@ export class CourseDto {
   @Max(100000000)
   price: number
 
-  @ApiProperty()
+  @ApiProperty({
+    enum: CourseLevel
+  })
   @IsEnum(CourseLevel)
   level: CourseLevel
 
-  @ApiProperty()
+  @ApiProperty({
+    enum: CourseStatus
+  })
   @IsEnum(CourseStatus)
   status: CourseStatus
 
@@ -90,10 +94,8 @@ export class CourseDto {
 
   @ApiProperty()
   @IsMongoId()
-  providerId: string
+  provider: string
 }
-
-export class CoursePaginateDto extends PaginateResponse(CourseDto) {}
 
 export class CreateLessonDto extends PickType(LessonDto, [
   'title',
@@ -118,3 +120,11 @@ export class CreateCourseDto extends PickType(CourseDto, [
   @ArrayMaxSize(10)
   lessons: CreateLessonDto[]
 }
+
+export class CoursePaginateDto extends PaginateResponse(CourseDto) {}
+
+export class CustomerViewCourseDto extends OmitType(CourseDto, [
+  'lessons',
+] as const) {}
+
+export class CustomerViewCoursePaginateDto extends PaginateResponse(CustomerViewCourseDto) {}

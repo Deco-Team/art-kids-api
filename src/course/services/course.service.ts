@@ -12,14 +12,18 @@ import { CourseStatus } from '@common/contracts/constant'
 export class CourseService {
   constructor(private readonly courseRepository: CourseRepository) {}
 
-  public async getCoursesByProvider(filter: FilterQuery<Course>, paginationParams: PaginationParams, providerId: string) {
+  public async getCoursesByProvider(
+    filter: FilterQuery<Course>,
+    paginationParams: PaginationParams,
+    providerId: string
+  ) {
     return await this.courseRepository.paginate(
       {
         ...filter,
         status: {
           $ne: CourseStatus.DELETED
         },
-        providerId
+        provider: providerId
       },
       {
         ...paginationParams
@@ -34,7 +38,7 @@ export class CourseService {
         status: {
           $ne: CourseStatus.DELETED
         },
-        providerId
+        provider: providerId
       }
     })
     if (!result) throw new AppException(Errors.COURSE_NOT_FOUND)
@@ -48,10 +52,15 @@ export class CourseService {
         // status: CourseStatus.PUBLISHED,
         status: {
           $ne: CourseStatus.DELETED
-        },
+        }
       },
       {
-        ...paginationParams
+        ...paginationParams,
+        projection: '-lessons',
+        populate: {
+          path: 'provider',
+          select: ['_id', 'name', 'image']
+        }
       }
     )
   }
@@ -63,7 +72,7 @@ export class CourseService {
         // status: CourseStatus.PUBLISHED,
         status: {
           $ne: CourseStatus.DELETED
-        },
+        }
       }
     })
     if (!result) throw new AppException(Errors.COURSE_NOT_FOUND)
@@ -74,7 +83,7 @@ export class CourseService {
     let course = (await this.courseRepository.findOne({ conditions: { title: createCourseDto.title } })) as Course
     if (course) throw new AppException(Errors.COURSE_EXISTED)
     course = new Course()
-    course = { ...course, ...createCourseDto, providerId }
+    course = { ...course, ...createCourseDto, provider: providerId }
 
     return this.courseRepository.create(course)
   }

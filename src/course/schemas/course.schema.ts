@@ -64,7 +64,7 @@ export class Course {
     type: Types.ObjectId,
     ref: 'Provider'
   })
-  providerId: string
+  provider: string
 }
 
 export type CourseDocument = HydratedDocument<Course>

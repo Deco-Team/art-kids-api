@@ -1,5 +1,6 @@
 import { LessonType } from '@common/contracts/constant'
 import { Prop, Schema } from '@nestjs/mongoose'
+import { Types } from 'mongoose'
 
 @Schema({
   _id: false,
@@ -25,6 +26,12 @@ export class Lesson {
 
   @Prop({ enum: LessonType, default: LessonType.FEE })
   type: LessonType
+
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'Course'
+  })
+  course?: string
 
   // @Prop()
   // status: string
