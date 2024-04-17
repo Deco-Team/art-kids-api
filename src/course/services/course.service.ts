@@ -6,7 +6,7 @@ import { AppException } from '@common/exceptions/app.exception'
 import { Errors } from '@common/contracts/error'
 import { FilterQuery } from 'mongoose'
 import { PaginationParams } from '@common/decorators/pagination.decorator'
-import { CourseStatus } from '@common/contracts/constant'
+import { CourseStatus, LessonType } from '@common/contracts/constant'
 
 @Injectable()
 export class CourseService {
@@ -76,6 +76,14 @@ export class CourseService {
       }
     })
     if (!result) throw new AppException(Errors.COURSE_NOT_FOUND)
+    result.lessons = result.lessons.map((lesson) => {
+      if (lesson.type === LessonType.FEE) {
+        lesson.description = undefined
+        lesson.objective = undefined
+        lesson.video = undefined
+      }
+      return lesson
+    })
     return result
   }
 
