@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Request, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
-import { CourseService } from '../services/course.service'
+import { CourseService } from '@course/services/course.service'
 import { CourseDto, CoursePaginateDto, CreateCourseDto } from '../dto/course.dto'
 import { get as getObjectPropValue } from 'lodash'
 import { DataResponse } from '@common/contracts/openapi-builder'
@@ -13,13 +13,13 @@ import { Pagination, PaginationParams } from '@common/decorators/pagination.deco
 import { ParseObjectIdPipe } from '@common/pipes/parse-object-id.pipe'
 
 @ApiTags('Course - Provider')
+@ApiBearerAuth()
+@Sides(UserSide.PROVIDER)
+@UseGuards(JwtAuthGuard.ACCESS_TOKEN, SidesGuard)
 @Controller('provider')
 export class ProviderCourseController {
   constructor(private readonly courseService: CourseService) {}
 
-  @ApiBearerAuth()
-  @Sides(UserSide.PROVIDER)
-  @UseGuards(JwtAuthGuard.ACCESS_TOKEN, SidesGuard)
   @Get()
   @ApiOkResponse({ type: DataResponse(CoursePaginateDto) })
   @ApiQuery({ type: PaginationQuery })
@@ -30,9 +30,6 @@ export class ProviderCourseController {
     return this.courseService.getProviderCourses(filter, paginationParams, providerId)
   }
 
-  @ApiBearerAuth()
-  @Sides(UserSide.PROVIDER)
-  @UseGuards(JwtAuthGuard.ACCESS_TOKEN, SidesGuard)
   @Get(':id')
   @ApiOkResponse({ type: DataResponse(CourseDto) })
   @ApiParam({ name: 'id' })
@@ -42,9 +39,6 @@ export class ProviderCourseController {
     return this.courseService.getProviderCourseDetails(id, providerId)
   }
 
-  @ApiBearerAuth()
-  @Sides(UserSide.PROVIDER)
-  @UseGuards(JwtAuthGuard.ACCESS_TOKEN, SidesGuard)
   @Post()
   @ApiCreatedResponse({ type: DataResponse(CourseDto) })
   createProduct(@Request() req, @Body() createCourseDto: CreateCourseDto) {
