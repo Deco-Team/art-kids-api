@@ -118,12 +118,22 @@ export const Errors: Record<string, ErrorResponse> = {
   },
   COURSE_EXISTED: {
     error: 'COURSE_EXISTED',
-    message: 'Khóa học đã tồn tại',
+    message: 'Course is already existed!',
     httpStatus: HttpStatus.BAD_REQUEST
   },
   COURSE_NOT_FOUND: {
     error: 'COURSE_NOT_FOUND',
-    message: 'Không tìm thấy khoá học',
+    message: 'Course is not found!',
+    httpStatus: HttpStatus.BAD_REQUEST
+  },
+  PAID_COURSE_MUST_HAVE_POSITIVE_PRICE: {
+    error: 'PAID_COURSE_MUST_HAVE_POSITIVE_PRICE',
+    message: 'Price of Paid course must be greater than 0!',
+    httpStatus: HttpStatus.BAD_REQUEST
+  },
+  PAID_COURSE_MUST_HAVE_AT_LEAST_ONE_PAID_LESSON: {
+    error: 'PAID_COURSE_MUST_HAVE_AT_LEAST_ONE_PAID_LESSON',
+    message: 'Paid course must have at least one paid lesson!',
     httpStatus: HttpStatus.BAD_REQUEST
   }
 }

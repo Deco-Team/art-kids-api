@@ -6,7 +6,7 @@ import { AppException } from '@common/exceptions/app.exception'
 import { Errors } from '@common/contracts/error'
 import { FilterQuery } from 'mongoose'
 import { PaginationParams } from '@common/decorators/pagination.decorator'
-import { CourseStatus, LessonType } from '@common/contracts/constant'
+import { CourseStatus, CourseType, LessonType } from '@common/contracts/constant'
 import { SuccessResponse } from '@common/contracts/dto'
 import { RejectCourseDto } from '@course/dto/reject-course.dto'
 
@@ -128,8 +128,8 @@ export class CourseService {
     })
     if (!result) throw new AppException(Errors.COURSE_NOT_FOUND)
     result.lessons = result.lessons.map((lesson) => {
-      // hide lessons info if type FEE
-      if (lesson.type === LessonType.FEE) {
+      // hide lessons info if type PAID
+      if (lesson.type === LessonType.PAID) {
         lesson.description = undefined
         lesson.objective = undefined
         lesson.video = undefined
@@ -142,6 +142,19 @@ export class CourseService {
   public async createCourse(createCourseDto: CreateCourseDto, providerId: string) {
     let course = (await this.courseRepository.findOne({ conditions: { title: createCourseDto.title } })) as Course
     if (course) throw new AppException(Errors.COURSE_EXISTED)
+
+    if (course.type === CourseType.FREE) {
+      course.price = 0
+      course.lessons.map((lesson) => {
+        lesson.type = LessonType.FREE
+        return lesson
+      })
+    }
+    if (course.type === CourseType.PAID) {
+      if (course.price <= 0) throw new AppException(Errors.PAID_COURSE_MUST_HAVE_POSITIVE_PRICE)
+      if (course.lessons.findIndex((lesson) => lesson.type === LessonType.PAID) === -1)
+        throw new AppException(Errors.PAID_COURSE_MUST_HAVE_AT_LEAST_ONE_PAID_LESSON)
+    }
     course = new Course()
     course = { ...course, ...createCourseDto, provider: providerId }
 

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { CourseLevel, CourseStatus, ProductStatus } from '@src/common/contracts/constant'
+import { CourseLevel, CourseStatus, CourseType, ProductStatus } from '@src/common/contracts/constant'
 import { Transform } from 'class-transformer'
 import { HydratedDocument, Types } from 'mongoose'
 import * as paginate from 'mongoose-paginate-v2'
@@ -37,8 +37,8 @@ export class Course {
   @Prop({ type: String })
   thumbnail: string
 
-  @Prop({ type: String })
-  duration: string
+  @Prop({ type: Number, default: 0 })
+  duration: number
 
   @Prop({ type: Number, default: 0 })
   price: number
@@ -48,6 +48,9 @@ export class Course {
     default: CourseLevel.EASY
   })
   level: CourseLevel
+
+  @Prop({ enum: CourseType, default: CourseType.PAID })
+  type: CourseType
 
   @Prop({
     enum: CourseStatus,

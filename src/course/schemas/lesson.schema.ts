@@ -24,7 +24,7 @@ export class Lesson {
   @Prop({ type: String })
   video: string
 
-  @Prop({ enum: LessonType, default: LessonType.FEE })
+  @Prop({ enum: LessonType, default: LessonType.PAID })
   type: LessonType
 
   @Prop({

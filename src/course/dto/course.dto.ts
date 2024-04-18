@@ -1,4 +1,4 @@
-import { CourseLevel, CourseStatus, LessonType } from '@common/contracts/constant'
+import { CourseLevel, CourseStatus, CourseType, LessonType } from '@common/contracts/constant'
 import { PaginateResponse } from '@common/contracts/openapi-builder'
 import { ApiProperty, OmitType, PickType } from '@nestjs/swagger'
 import {
@@ -64,9 +64,11 @@ export class CourseDto {
   thumbnail: string
 
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  duration: string
+  @Min(0)
+  @Max(100000000)
+  duration: number
 
   @ApiProperty()
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 2 })
@@ -79,6 +81,12 @@ export class CourseDto {
   })
   @IsEnum(CourseLevel)
   level: CourseLevel
+
+  @ApiProperty({
+    enum: CourseType
+  })
+  @IsEnum(CourseType)
+  type: CourseType
 
   @ApiProperty({
     enum: CourseStatus
@@ -116,7 +124,8 @@ export class CreateCourseDto extends PickType(CourseDto, [
   'thumbnail',
   'duration',
   'price',
-  'level'
+  'level',
+  'type'
 ] as const) {
   @ApiProperty({ type: [CreateLessonDto] })
   @IsArray()

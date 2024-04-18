@@ -46,8 +46,13 @@ export enum CourseStatus {
 }
 
 export enum LessonType {
-  TRIAL = 'TRIAL',
-  FEE = 'FEE'
+  FREE = 'FREE',
+  PAID = 'PAID'
+}
+
+export enum CourseType {
+  FREE = 'FREE',
+  PAID = 'PAID'
 }
 
 export enum OrderStatus {
