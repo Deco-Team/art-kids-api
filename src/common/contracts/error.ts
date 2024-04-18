@@ -135,5 +135,10 @@ export const Errors: Record<string, ErrorResponse> = {
     error: 'PAID_COURSE_MUST_HAVE_AT_LEAST_ONE_PAID_LESSON',
     message: 'Paid course must have at least one paid lesson!',
     httpStatus: HttpStatus.BAD_REQUEST
-  }
+  },
+  PROVIDER_EXISTED: {
+    error: 'PROVIDER_EXISTED',
+    message: 'Giáo viên đã tồn tại',
+    httpStatus: HttpStatus.BAD_REQUEST
+  },
 }
