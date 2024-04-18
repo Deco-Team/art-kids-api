@@ -12,9 +12,9 @@ import { Pagination, PaginationParams } from '@common/decorators/pagination.deco
 import { ParseObjectIdPipe } from '@common/pipes/parse-object-id.pipe'
 
 @ApiTags('Course - Customer')
-@ApiBearerAuth()
-@Sides(UserSide.CUSTOMER)
-@UseGuards(JwtAuthGuard.ACCESS_TOKEN, SidesGuard)
+// @ApiBearerAuth()
+// @Sides(UserSide.CUSTOMER)
+// @UseGuards(JwtAuthGuard.ACCESS_TOKEN, SidesGuard)
 @Controller('customer')
 export class CustomerCourseController {
   constructor(private readonly courseService: CourseService) {}
