@@ -90,6 +90,10 @@ import { CourseModule } from './course/course.module'
       {
         path: 'courses',
         module: CourseModule
+      },
+      {
+        path: 'providers',
+        module: ProviderModule
       }
       // {
       //   path: 'products',
