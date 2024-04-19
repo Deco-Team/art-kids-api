@@ -13,17 +13,17 @@ export const Errors: Record<string, ErrorResponse> = {
   },
   WRONG_EMAIL_OR_PASSWORD: {
     error: 'WRONG_EMAIL_OR_PASSWORD',
-    message: 'Email hoặc mật khẩu không đúng',
+    message: 'Email or password is incorrect',
     httpStatus: HttpStatus.BAD_REQUEST
   },
   INACTIVE_ACCOUNT: {
     error: 'INACTIVE_ACCOUNT',
-    message: 'Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên lạc với admin.',
+    message: 'Your account has been inactive. Please contact with admin.',
     httpStatus: HttpStatus.BAD_REQUEST
   },
   EMAIL_ALREADY_EXIST: {
     error: 'EMAIL_ALREADY_EXIST',
-    message: 'Email đã được sử dụng',
+    message: 'Email is already existed',
     httpStatus: HttpStatus.BAD_REQUEST
   },
   CUSTOMER_NOT_FOUND: {
@@ -83,7 +83,7 @@ export const Errors: Record<string, ErrorResponse> = {
   },
   STAFF_NOT_FOUND: {
     error: 'STAFF_NOT_FOUND',
-    message: 'Không tìm thấy nhân viên.',
+    message: 'Staff is not found.',
     httpStatus: HttpStatus.BAD_REQUEST
   },
   CONSULTANT_BOOKING_NOT_FOUND: {
