@@ -1,6 +1,7 @@
 import { AuthService } from '@auth/services/auth.service'
 import { Status } from '@common/contracts/constant'
 import { Errors } from '@common/contracts/error'
+import { PaginationParams } from '@common/decorators/pagination.decorator'
 import { AppException } from '@common/exceptions/app.exception'
 import { MailerService } from '@nestjs-modules/mailer'
 import { BadRequestException, Injectable } from '@nestjs/common'
@@ -8,7 +9,7 @@ import { InjectConnection } from '@nestjs/mongoose'
 import { CreateProviderDto } from '@provider/dto/provider.dto'
 import { ProviderRepository } from '@provider/repositories/provider.repository'
 import { Provider } from '@provider/schemas/provider.schema'
-import { Connection } from 'mongoose'
+import { Connection, FilterQuery } from 'mongoose'
 
 @Injectable()
 export class ProviderService {
@@ -18,6 +19,33 @@ export class ProviderService {
     private readonly authService: AuthService,
     private readonly mailerService: MailerService
   ) {}
+
+  public async getProvidersByAdmin(filter: FilterQuery<Provider>, paginationParams: PaginationParams) {
+    return await this.providerRepository.paginate(
+      {
+        ...filter,
+        status: {
+          $ne: Status.DELETED
+        }
+      },
+      {
+        ...paginationParams
+      }
+    )
+  }
+
+  public async getProviderDetailByAdmin(providerId: string) {
+    const result = await this.providerRepository.findOne({
+      conditions: {
+        _id: providerId,
+        status: {
+          $ne: Status.DELETED
+        }
+      }
+    })
+    if (!result) throw new AppException(Errors.PROVIDER_NOT_FOUND)
+    return result
+  }
 
   public async createProvider(createProviderDto: CreateProviderDto) {
     let provider = (await this.providerRepository.findOne({
