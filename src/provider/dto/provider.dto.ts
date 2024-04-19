@@ -1,4 +1,5 @@
 import { Gender, Status } from '@common/contracts/constant'
+import { PaginateResponse } from '@common/contracts/openapi-builder'
 import { ApiProperty, OmitType } from '@nestjs/swagger'
 import { IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsString, IsUrl } from 'class-validator'
 
@@ -50,3 +51,5 @@ export class ProviderDto {
 }
 
 export class CreateProviderDto extends OmitType(ProviderDto, ['_id', 'status']) {}
+
+export class ProviderPaginateDto extends PaginateResponse(ProviderDto) {}

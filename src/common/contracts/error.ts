@@ -138,7 +138,12 @@ export const Errors: Record<string, ErrorResponse> = {
   },
   PROVIDER_EXISTED: {
     error: 'PROVIDER_EXISTED',
-    message: 'Giáo viên đã tồn tại',
+    message: 'Provider is already existed!',
     httpStatus: HttpStatus.BAD_REQUEST
   },
+  PROVIDER_NOT_FOUND: {
+    error: 'PROVIDER_NOT_FOUND',
+    message: 'Provider is not found!',
+    httpStatus: HttpStatus.BAD_REQUEST
+  }
 }
