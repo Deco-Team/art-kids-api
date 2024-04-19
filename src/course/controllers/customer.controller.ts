@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common'
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { CourseService } from '@course/services/course.service'
 import { CourseDto, CustomerViewCoursePaginateDto } from '../dto/course.dto'
@@ -10,6 +10,7 @@ import { UserSide } from '@common/contracts/constant'
 import { PaginationQuery } from '@common/contracts/dto'
 import { Pagination, PaginationParams } from '@common/decorators/pagination.decorator'
 import { ParseObjectIdPipe } from '@common/pipes/parse-object-id.pipe'
+import { FilterCourseDto } from '@course/dto/filter-course.dto'
 
 @ApiTags('Course - Customer')
 // @ApiBearerAuth()
@@ -22,10 +23,28 @@ export class CustomerCourseController {
   @Get()
   @ApiOkResponse({ type: DataResponse(CustomerViewCoursePaginateDto) })
   @ApiQuery({ type: PaginationQuery })
-  getCourses(@Pagination() paginationParams: PaginationParams) {
-    const filter = {}
+  getCourses(@Pagination() paginationParams: PaginationParams, @Query() filterCourseDto: FilterCourseDto) {
+    const condition = {}
 
-    return this.courseService.getCoursesByCustomer(filter, paginationParams)
+    if (filterCourseDto.title) {
+      condition['$text'] = {
+        $search: filterCourseDto.title
+      }
+    }
+
+    if (filterCourseDto.type) {
+      condition['type'] = filterCourseDto.type
+    }
+
+    if (filterCourseDto.level) {
+      condition['level'] = filterCourseDto.level
+    }
+
+    if (filterCourseDto.fromPrice !== undefined && filterCourseDto.toPrice !== undefined) {
+      condition['price'] = { $gte: filterCourseDto.fromPrice, $lte: filterCourseDto.toPrice }
+    }
+    
+    return this.courseService.getCoursesByCustomer(condition, paginationParams)
   }
 
   @Get(':id')

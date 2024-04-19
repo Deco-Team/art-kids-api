@@ -17,29 +17,29 @@ import { AnalyticService } from '@analytic/services/analytic.service'
 export class CurrentAnalyticController {
   constructor(private readonly analyticService: AnalyticService) {}
 
-  @Get('orders')
-  @ApiOperation({
-    summary: 'View current order analytics in currentPeriod with previousPeriod'
-  })
-  @ApiOkResponse({ type: CurrentAnalyticResponseDto })
-  getOrderCount(@Query() queryCurrentAnalyticDto: QueryCurrentAnalyticDto) {
-    const current = moment()
-    let unitOfTime
-    switch (queryCurrentAnalyticDto.periodType) {
-      case AnalyticPeriod.DAY:
-        unitOfTime = 'day'
-        break
-      case AnalyticPeriod.MONTH:
-        unitOfTime = 'month'
-        break
-      case AnalyticPeriod.YEAR:
-        unitOfTime = 'year'
-        break
-    }
-    const startOfCurrentPeriod = moment().startOf(unitOfTime)
-    const startOfPreviousPeriod = moment().subtract(1, unitOfTime).startOf(unitOfTime)
-    return this.analyticService.getOrderCount(current, startOfCurrentPeriod, startOfPreviousPeriod)
-  }
+  // @Get('orders')
+  // @ApiOperation({
+  //   summary: 'View current order analytics in currentPeriod with previousPeriod'
+  // })
+  // @ApiOkResponse({ type: CurrentAnalyticResponseDto })
+  // getOrderCount(@Query() queryCurrentAnalyticDto: QueryCurrentAnalyticDto) {
+  //   const current = moment()
+  //   let unitOfTime
+  //   switch (queryCurrentAnalyticDto.periodType) {
+  //     case AnalyticPeriod.DAY:
+  //       unitOfTime = 'day'
+  //       break
+  //     case AnalyticPeriod.MONTH:
+  //       unitOfTime = 'month'
+  //       break
+  //     case AnalyticPeriod.YEAR:
+  //       unitOfTime = 'year'
+  //       break
+  //   }
+  //   const startOfCurrentPeriod = moment().startOf(unitOfTime)
+  //   const startOfPreviousPeriod = moment().subtract(1, unitOfTime).startOf(unitOfTime)
+  //   return this.analyticService.getOrderCount(current, startOfCurrentPeriod, startOfPreviousPeriod)
+  // }
 
   @Get('sales')
   @ApiOperation({

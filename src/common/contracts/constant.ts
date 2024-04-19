@@ -57,20 +57,13 @@ export enum CourseType {
 
 export enum OrderStatus {
   PENDING = 'PENDING',
-  CONFIRMED = 'CONFIRMED',
-  DELIVERING = 'DELIVERING',
   COMPLETED = 'COMPLETED',
-  CANCELED = 'CANCELED',
-  DELETED = 'DELETED'
 }
 
 export enum TransactionStatus {
   DRAFT = 'DRAFT',
   CAPTURED = 'CAPTURED',
   ERROR = 'ERROR',
-  CANCELED = 'CANCELED',
-  DELETED = 'DELETED',
-  REFUNDED = 'REFUNDED'
 }
 
 export enum Gender {

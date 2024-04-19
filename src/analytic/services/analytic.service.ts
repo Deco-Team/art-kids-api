@@ -17,33 +17,33 @@ export class AnalyticService {
     private readonly paymentRepository: PaymentRepository
   ) {}
 
-  public async getOrderCount(current: Moment, startOfCurrentPeriod: Moment, startOfPreviousPeriod: Moment) {
-    const filter = {
-      orderStatus: {
-        $in: [OrderStatus.PENDING, OrderStatus.CONFIRMED, OrderStatus.DELIVERING, OrderStatus.COMPLETED]
-      },
-      transactionStatus: {
-        $in: [
-          TransactionStatus.CAPTURED,
-          TransactionStatus.ERROR,
-          TransactionStatus.CANCELED,
-          TransactionStatus.REFUNDED
-        ]
-      }
-    }
-    const [total, previousTotal] = await Promise.all([
-      this.orderRepository.model.countDocuments({
-        ...filter,
-        createdAt: { $lte: current, $gte: startOfCurrentPeriod }
-      }),
-      this.orderRepository.model.countDocuments({
-        ...filter,
-        createdAt: { $lte: startOfCurrentPeriod, $gte: startOfPreviousPeriod }
-      })
-    ])
-    const percent = previousTotal !== 0 ? Math.round(((total - previousTotal) / previousTotal) * 100 * 100) / 100 : 0
-    return { total, previousTotal, percent }
-  }
+  // public async getOrderCount(current: Moment, startOfCurrentPeriod: Moment, startOfPreviousPeriod: Moment) {
+  //   const filter = {
+  //     orderStatus: {
+  //       $in: [OrderStatus.PENDING, OrderStatus.CONFIRMED, OrderStatus.DELIVERING, OrderStatus.COMPLETED]
+  //     },
+  //     transactionStatus: {
+  //       $in: [
+  //         TransactionStatus.CAPTURED,
+  //         TransactionStatus.ERROR,
+  //         TransactionStatus.CANCELED,
+  //         TransactionStatus.REFUNDED
+  //       ]
+  //     }
+  //   }
+  //   const [total, previousTotal] = await Promise.all([
+  //     this.orderRepository.model.countDocuments({
+  //       ...filter,
+  //       createdAt: { $lte: current, $gte: startOfCurrentPeriod }
+  //     }),
+  //     this.orderRepository.model.countDocuments({
+  //       ...filter,
+  //       createdAt: { $lte: startOfCurrentPeriod, $gte: startOfPreviousPeriod }
+  //     })
+  //   ])
+  //   const percent = previousTotal !== 0 ? Math.round(((total - previousTotal) / previousTotal) * 100 * 100) / 100 : 0
+  //   return { total, previousTotal, percent }
+  // }
 
   public async getSalesSum(current: Date, startOfCurrentPeriod: Date, startOfPreviousPeriod: Date) {
     const filter = {

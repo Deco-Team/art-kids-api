@@ -15,7 +15,7 @@ import {
   Min
 } from 'class-validator'
 
-class LessonDto {
+export class LessonDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -67,13 +67,13 @@ export class CourseDto {
   @IsNumber()
   @IsNotEmpty()
   @Min(0)
-  @Max(100000000)
+  @Max(100_000_000)
   duration: number
 
   @ApiProperty()
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 2 })
   @Min(0)
-  @Max(100000000)
+  @Max(100_000_000)
   price: number
 
   @ApiProperty({

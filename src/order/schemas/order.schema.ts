@@ -1,12 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { HydratedDocument } from 'mongoose'
+import { HydratedDocument, Types } from 'mongoose'
 import * as paginate from 'mongoose-paginate-v2'
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
 import { OrderStatus, TransactionStatus, UserRole } from '@common/contracts/constant'
 import { IsEmail, IsNotEmpty, IsPhoneNumber, MaxLength, ValidateNested } from 'class-validator'
-import { Product } from '@product/schemas/product.schema'
-import { CreateOrderItemDto } from '@order/dto/order.dto'
 import { Payment } from '@payment/schemas/payment.schema'
 
 export class CustomerOrderDto {
@@ -62,12 +60,12 @@ export class OrderHistoryDto {
   userRole: UserRole
 }
 
-export class OrderItemDto extends CreateOrderItemDto {
-  @ApiProperty()
-  product: Product
+export class OrderItemDto {
+  @Prop({ type: Types.ObjectId, ref: 'Course' })
+  course: string
 
-  @ApiProperty()
-  quantity: number
+  @Prop({ type: Number, required: true })
+  price: number
 }
 
 export type OrderDocument = HydratedDocument<Order>
@@ -92,66 +90,39 @@ export class Order {
 
   @ApiProperty()
   @Prop({ type: String })
-  orderId: string
+  orderNumber: string
+  
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'Customer'
+  })
+  customer: string
 
-  @ApiProperty({ type: CustomerOrderDto })
-  @Prop({ type: CustomerOrderDto, required: true })
-  customer: CustomerOrderDto
-
-  @ApiProperty({ isArray: true, type: OrderItemDto })
-  @ValidateNested()
-  @Prop({ type: Array<OrderItemDto>, required: true, select: false })
+  @Prop({ type: Array<OrderItemDto>, required: true })
   items: OrderItemDto[]
 
-  @ApiProperty()
   @Prop({ type: Number, required: true })
   totalAmount: number
 
-  @ApiProperty()
   @Prop({ type: Date, required: true, default: new Date() })
   orderDate: Date
 
-  @ApiProperty()
   @Prop({
     enum: OrderStatus,
     default: OrderStatus.PENDING
   })
   orderStatus: OrderStatus
 
-  @ApiProperty()
   @Prop({
     enum: TransactionStatus,
     default: TransactionStatus.DRAFT
   })
   transactionStatus: TransactionStatus
 
-  @ApiProperty()
-  @Prop({ type: Payment })
-  payment: Payment
-
-  @Prop({ type: [OrderHistoryDto], select: false })
-  orderHistory: OrderHistoryDto[]
-
-  @ApiProperty()
-  @Prop({ type: Date })
-  deliveryDate: Date
-
-  @ApiProperty()
-  @Prop({ type: Date })
-  completeDate: Date
-
-  @ApiPropertyOptional()
-  @Prop({ type: String })
-  notes?: string
-
-  @ApiPropertyOptional()
-  @Prop({ type: Boolean })
-  isDeliveryAssigned?: boolean
-
-  @Prop({ type: String })
-  reason?: string
+  // @ApiProperty()
+  // @Prop({ type: Payment })
+  // payment: Payment
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order)
-
 OrderSchema.plugin(paginate)

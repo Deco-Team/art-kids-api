@@ -94,6 +94,10 @@ import { CourseModule } from './course/course.module'
       {
         path: 'providers',
         module: ProviderModule
+      },
+      {
+        path: 'orders',
+        module: OrderModule
       }
       // {
       //   path: 'products',
@@ -103,10 +107,6 @@ import { CourseModule } from './course/course.module'
       //   path: 'categories',
       //   module: CategoryModule
       // },
-      // {
-      //   path: 'orders',
-      //   module: OrderModule
-      // }
     ]),
     CommonModule,
     AuthModule,
@@ -115,13 +115,13 @@ import { CourseModule } from './course/course.module'
     ProviderModule,
     AdminModule,
     TokenModule,
-    CourseModule
+    CourseModule,
+    OrderModule,
+    PaymentModule
     // ProductModule,
     // CartModule,
     // CategoryModule,
-    // OrderModule,
     // AnalyticModule,
-    // PaymentModule
   ],
   controllers: [AppController],
   providers: [AppService]

@@ -68,12 +68,12 @@ export const Errors: Record<string, ErrorResponse> = {
   },
   ORDER_NOT_FOUND: {
     error: 'ORDER_NOT_FOUND',
-    message: 'Không tìm thấy đơn hàng',
+    message: 'Order is not found!',
     httpStatus: HttpStatus.BAD_REQUEST
   },
   ORDER_ITEMS_INVALID: {
     error: 'ORDER_ITEMS_INVALID',
-    message: 'Sản phẩm không có trong giỏ hàng.',
+    message: 'Items in order is invalid',
     httpStatus: HttpStatus.BAD_REQUEST
   },
   ORDER_STATUS_INVALID: {
@@ -124,6 +124,11 @@ export const Errors: Record<string, ErrorResponse> = {
   COURSE_NOT_FOUND: {
     error: 'COURSE_NOT_FOUND',
     message: 'Course is not found!',
+    httpStatus: HttpStatus.BAD_REQUEST
+  },
+  COURSE_ALREADY_ORDERED: {
+    error: 'COURSE_ALREADY_ORDERED',
+    message: 'Course is already ordered!',
     httpStatus: HttpStatus.BAD_REQUEST
   },
   PAID_COURSE_MUST_HAVE_POSITIVE_PRICE: {

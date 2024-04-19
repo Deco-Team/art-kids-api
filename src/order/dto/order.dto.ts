@@ -1,34 +1,21 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { DataResponse, PaginateResponse } from '@src/common/contracts/openapi-builder'
 import { ArrayMinSize, IsMongoId, IsNotEmpty, MaxLength, MinLength, ValidateNested } from 'class-validator'
-import { CustomerOrderDto, OrderHistoryDto, OrderItemDto } from '@order/schemas/order.schema'
-import { Prop } from '@nestjs/mongoose'
-import { Types } from 'mongoose'
+import { OrderHistoryDto, OrderItemDto } from '@order/schemas/order.schema'
 import { Type } from 'class-transformer'
 import { OrderStatus, TransactionStatus } from '@src/common/contracts/constant'
-import { PaymentMethod } from '@payment/contracts/constant'
+// import { PaymentMethod } from '@payment/contracts/constant'
 import { PaymentDto } from '@payment/dto/payment.dto'
 
 export class CreateOrderItemDto {
-  @Prop({ type: Types.ObjectId, ref: 'Product' })
-  @ApiProperty({ example: 'productId' })
-  @IsNotEmpty()
+  @ApiProperty()
   @IsMongoId()
-  productId: Types.ObjectId
+  courseId: string
 
-  @Prop()
-  @ApiProperty({ example: 'EF20241212' })
-  @IsNotEmpty()
-  sku: string
+  price?: number
 }
 
 export class CreateOrderDto {
-  @ApiProperty({ type: () => CustomerOrderDto })
-  @IsNotEmpty()
-  @ValidateNested()
-  @Type(() => CustomerOrderDto)
-  customer: CustomerOrderDto
-
   @ApiProperty({ isArray: true, type: CreateOrderItemDto })
   @IsNotEmpty()
   @ArrayMinSize(1)
@@ -36,16 +23,14 @@ export class CreateOrderDto {
   @Type(() => CreateOrderItemDto)
   items: CreateOrderItemDto[]
 
-  @ApiProperty({ enum: PaymentMethod })
+  // @ApiProperty({ enum: PaymentMethod })
   // @IsNotEmpty()
   // @IsEnum(PaymentMethod)
-  paymentMethod?: PaymentMethod
+  // paymentMethod?: PaymentMethod
 
-  @ApiPropertyOptional()
-  @MaxLength(256)
-  notes?: string
-
-  orderHistory?: OrderHistoryDto[]
+  customer?: string
+  orderId?: string
+  totalAmount?: number
 }
 
 export class OrderDto {
@@ -53,12 +38,12 @@ export class OrderDto {
   _id: string
 
   @ApiProperty()
-  orderId: string
+  orderNumber: string
 
-  @ApiProperty({ type: () => CustomerOrderDto })
-  customer: CustomerOrderDto
+  @ApiProperty()
+  customer: string
 
-  @ApiProperty({ isArray: true, type: () => OrderItemDto })
+  @ApiProperty({ isArray: true, type: OrderItemDto })
   items: OrderItemDto[]
 
   @ApiProperty()
@@ -73,20 +58,8 @@ export class OrderDto {
   @ApiProperty({ enum: TransactionStatus })
   transactionStatus: TransactionStatus
 
-  @ApiProperty()
-  payment: PaymentDto
-
-  @ApiProperty()
-  deliveryDate: Date
-
-  @ApiProperty()
-  completeDate: Date
-
-  @ApiPropertyOptional()
-  notes?: string
-  
-  @ApiPropertyOptional()
-  isDeliveryAssigned?: boolean
+  // @ApiProperty()
+  // payment: PaymentDto
 }
 
 export class OrderPaginateResponseDto extends DataResponse(

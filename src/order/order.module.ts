@@ -8,9 +8,15 @@ import { OrderRepository } from '@order/repositories/order.repository'
 import { CartModule } from '@cart/cart.module'
 import { ProductModule } from '@product/product.module'
 import { OrderProviderController } from '@order/controllers/provider.controller'
+import { CourseModule } from '@course/course.module'
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Order.name, schema: OrderSchema }]), CartModule, ProductModule],
+  imports: [
+    MongooseModule.forFeature([{ name: Order.name, schema: OrderSchema }]),
+    CartModule,
+    ProductModule,
+    CourseModule
+  ],
   controllers: [OrderCustomerController, OrderProviderController],
   providers: [OrderService, OrderRepository],
   exports: [OrderService, OrderRepository]
