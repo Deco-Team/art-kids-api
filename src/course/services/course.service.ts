@@ -143,16 +143,16 @@ export class CourseService {
     let course = (await this.courseRepository.findOne({ conditions: { title: createCourseDto.title } })) as Course
     if (course) throw new AppException(Errors.COURSE_EXISTED)
 
-    if (course.type === CourseType.FREE) {
-      course.price = 0
-      course.lessons.map((lesson) => {
+    if (createCourseDto.type === CourseType.FREE) {
+      createCourseDto.price = 0
+      createCourseDto.lessons.map((lesson) => {
         lesson.type = LessonType.FREE
         return lesson
       })
     }
-    if (course.type === CourseType.PAID) {
-      if (course.price <= 0) throw new AppException(Errors.PAID_COURSE_MUST_HAVE_POSITIVE_PRICE)
-      if (course.lessons.findIndex((lesson) => lesson.type === LessonType.PAID) === -1)
+    if (createCourseDto.type === CourseType.PAID) {
+      if (createCourseDto.price <= 0) throw new AppException(Errors.PAID_COURSE_MUST_HAVE_POSITIVE_PRICE)
+      if (createCourseDto.lessons.findIndex((lesson) => lesson.type === LessonType.PAID) === -1)
         throw new AppException(Errors.PAID_COURSE_MUST_HAVE_AT_LEAST_ONE_PAID_LESSON)
     }
     course = new Course()
