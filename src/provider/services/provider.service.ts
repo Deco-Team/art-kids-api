@@ -63,12 +63,12 @@ export class ProviderService {
     session.startTransaction()
 
     try {
-      provider = await this.providerRepository.create(provider)
+      provider = await this.providerRepository.create(provider, { session })
 
       try {
         await this.mailerService.sendMail({
           to: provider.email,
-          subject: '[Furnique] Thông tin đăng nhập hệ thống',
+          subject: '[Art Kids] Thông tin đăng nhập hệ thống',
           template: 'invite-staff',
           context: {
             name: provider.name,

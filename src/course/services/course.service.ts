@@ -140,7 +140,7 @@ export class CourseService {
   }
 
   public async createCourse(createCourseDto: CreateCourseDto, providerId: string) {
-    let course = (await this.courseRepository.findOne({ conditions: { title: createCourseDto.title } })) as Course
+    let course = (await this.courseRepository.findOne({ conditions: { title: createCourseDto.title, provider: providerId } })) as Course
     if (course) throw new AppException(Errors.COURSE_EXISTED)
 
     if (createCourseDto.type === CourseType.FREE) {
