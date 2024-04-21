@@ -9,10 +9,15 @@ import { PaginationParams } from '@common/decorators/pagination.decorator'
 import { CourseStatus, CourseType, LessonType } from '@common/contracts/constant'
 import { SuccessResponse } from '@common/contracts/dto'
 import { RejectCourseDto } from '@course/dto/reject-course.dto'
+import { CustomerCourse } from '@course/schemas/customer-course.schema'
+import { CustomerCourseRepository } from '@course/repositories/customer-course.repository'
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly courseRepository: CourseRepository) {}
+  constructor(
+    private readonly courseRepository: CourseRepository,
+    private readonly customerCourseRepository: CustomerCourseRepository
+  ) {}
 
   public async getCoursesByAdmin(filter: FilterQuery<Course>, paginationParams: PaginationParams) {
     return await this.courseRepository.paginate(
@@ -94,7 +99,7 @@ export class CourseService {
     return await this.courseRepository.paginate(
       {
         ...filter,
-        status: CourseStatus.PUBLISHED,
+        status: CourseStatus.PUBLISHED
       },
       {
         ...paginationParams,
@@ -111,7 +116,7 @@ export class CourseService {
     const result = await this.courseRepository.findOne({
       conditions: {
         _id: courseId,
-        status: CourseStatus.PUBLISHED,
+        status: CourseStatus.PUBLISHED
       },
       populates: [
         {
@@ -131,6 +136,55 @@ export class CourseService {
       return lesson
     })
     return result
+  }
+
+  public async getMyCourses(filter: FilterQuery<CustomerCourse>, paginationParams: PaginationParams) {
+    return await this.customerCourseRepository
+      .paginate(
+        {
+          ...filter
+        },
+        {
+          ...paginationParams,
+          populate: {
+            path: 'course',
+            populate: {
+              path: 'provider',
+              model: 'Provider',
+              select: ['_id', 'name', 'image']
+            }
+          }
+        }
+      )
+      .then((result) => {
+        const docs = result.docs.map((doc) => {
+          const course = doc.course
+          const completedLessons = course.lessons.filter((lesson) => lesson.isCompleted === true).length
+          return { ...course, completedLessons, totalLessons: course.lessons.length }
+        })
+        return { ...result, docs }
+      })
+  }
+
+  public async getMyCourseDetail(filter: FilterQuery<CustomerCourse>) {
+    const result = await this.customerCourseRepository.findOne({
+      conditions: filter,
+      populates: [
+        {
+          path: 'course',
+          populate: {
+            path: 'provider',
+            model: 'Provider',
+            select: ['_id', 'name', 'image']
+          }
+        }
+      ]
+    })
+
+    if (!result) throw new AppException(Errors.MY_COURSE_NOT_FOUND)
+    const course = result.course
+    const completedLessons = result.course.lessons.filter((lesson) => lesson.isCompleted === true).length
+    return { ...course, completedLessons, totalLessons: course.lessons.length }
   }
 
   public async createCourse(createCourseDto: CreateCourseDto, providerId: string) {

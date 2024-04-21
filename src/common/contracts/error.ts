@@ -150,5 +150,10 @@ export const Errors: Record<string, ErrorResponse> = {
     error: 'PROVIDER_NOT_FOUND',
     message: 'Provider is not found!',
     httpStatus: HttpStatus.BAD_REQUEST
+  },
+  MY_COURSE_NOT_FOUND: {
+    error: 'COURSE_NOT_FOUND',
+    message: 'My Course is not found!',
+    httpStatus: HttpStatus.BAD_REQUEST
   }
 }
