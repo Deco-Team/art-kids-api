@@ -68,7 +68,7 @@ export class ProviderService {
       try {
         await this.mailerService.sendMail({
           to: provider.email,
-          subject: '[Furnique] Thông tin đăng nhập hệ thống',
+          subject: '[ArtKids] Thông tin đăng nhập hệ thống',
           template: 'invite-staff',
           context: {
             name: provider.name,

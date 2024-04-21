@@ -94,10 +94,7 @@ export class CourseService {
     return await this.courseRepository.paginate(
       {
         ...filter,
-        // status: CourseStatus.PUBLISHED,
-        status: {
-          $ne: CourseStatus.DELETED
-        }
+        status: CourseStatus.PUBLISHED,
       },
       {
         ...paginationParams,
@@ -114,10 +111,7 @@ export class CourseService {
     const result = await this.courseRepository.findOne({
       conditions: {
         _id: courseId,
-        // status: CourseStatus.PUBLISHED,
-        status: {
-          $ne: CourseStatus.DELETED
-        }
+        status: CourseStatus.PUBLISHED,
       },
       populates: [
         {
