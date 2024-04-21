@@ -6,9 +6,11 @@ import {
   ArrayMinSize,
   IsArray,
   IsEnum,
+  IsInt,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
+  IsPositive,
   IsString,
   IsUrl,
   Max,
@@ -64,9 +66,8 @@ export class CourseDto {
   thumbnail: string
 
   @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  @Min(0)
+  @IsInt()
+  @IsPositive()
   @Max(100_000_000)
   duration: number
 

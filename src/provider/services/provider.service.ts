@@ -63,7 +63,7 @@ export class ProviderService {
     session.startTransaction()
 
     try {
-      provider = await this.providerRepository.create(provider)
+      provider = await this.providerRepository.create(provider, { session })
 
       try {
         await this.mailerService.sendMail({
