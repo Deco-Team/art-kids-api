@@ -41,7 +41,7 @@ export class ProviderCourseController {
 
   @Post()
   @ApiCreatedResponse({ type: DataResponse(CourseDto) })
-  createProduct(@Request() req, @Body() createCourseDto: CreateCourseDto) {
+  createCourse(@Request() req, @Body() createCourseDto: CreateCourseDto) {
     const providerId = getObjectPropValue(req, 'user._id')
     return this.courseService.createCourse(createCourseDto, providerId)
   }

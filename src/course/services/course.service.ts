@@ -11,6 +11,7 @@ import { SuccessResponse } from '@common/contracts/dto'
 import { RejectCourseDto } from '@course/dto/reject-course.dto'
 import { CustomerCourse } from '@course/schemas/customer-course.schema'
 import { CustomerCourseRepository } from '@course/repositories/customer-course.repository'
+import { CompleteLessonCourseDto } from '@course/dto/complete-lesson-course.dto'
 
 @Injectable()
 export class CourseService {
@@ -245,6 +246,27 @@ export class CourseService {
 
     // send mail and notification
 
+    return new SuccessResponse(true)
+  }
+
+  public async completeLessonCourse(
+    filter: FilterQuery<CustomerCourse>,
+    completeLessonCourseDto: CompleteLessonCourseDto
+  ) {
+    const customerCourse = await this.customerCourseRepository.findOne({ conditions: filter })
+    const lessons = customerCourse.course.lessons
+    if (completeLessonCourseDto.lessonIndex > lessons.length - 1) return new SuccessResponse(false)
+    lessons[completeLessonCourseDto.lessonIndex].isCompleted = true
+    await this.customerCourseRepository.findOneAndUpdate(
+      {
+        _id: customerCourse._id
+      },
+      {
+        $set: {
+          'course.lessons': lessons
+        }
+      }
+    )
     return new SuccessResponse(true)
   }
 }

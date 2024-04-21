@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, Request, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Param, Patch, Query, Request, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { CourseService } from '@course/services/course.service'
 import { CourseDto, CustomerViewCoursePaginateDto } from '../dto/course.dto'
@@ -7,13 +7,14 @@ import { Sides } from '@auth/decorators/sides.decorator'
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard'
 import { SidesGuard } from '@auth/guards/sides.guard'
 import { UserSide } from '@common/contracts/constant'
-import { PaginationQuery } from '@common/contracts/dto'
+import { PaginationQuery, SuccessDataResponse } from '@common/contracts/dto'
 import { Pagination, PaginationParams } from '@common/decorators/pagination.decorator'
 import { ParseObjectIdPipe } from '@common/pipes/parse-object-id.pipe'
 import { FilterCourseDto } from '@course/dto/filter-course.dto'
 import { get } from 'lodash'
-import { Types } from 'mongoose';
+import { Types } from 'mongoose'
 import { MyCourseDto, MyCoursePaginateDto } from '@course/dto/my-course.dto'
+import { CompleteLessonCourseDto } from '@course/dto/complete-lesson-course.dto'
 
 @ApiTags('Course - Customer')
 @Controller('customer')
@@ -77,7 +78,7 @@ export class CustomerCourseController {
 
   @Get('my-courses/:id')
   @ApiOperation({
-    summary: 'Customer can view course detail(if course is ordered, it will return all unlocked lessons)'
+    summary: 'Customer can view course detail(show all unlocked lessons)'
   })
   @ApiBearerAuth()
   @Sides(UserSide.CUSTOMER)
@@ -87,5 +88,23 @@ export class CustomerCourseController {
   getMyCourseDetail(@Request() req, @Param('id', ParseObjectIdPipe) id: string) {
     const condition = { customer: get(req, 'user._id'), 'course._id': new Types.ObjectId(id) }
     return this.courseService.getMyCourseDetail(condition)
+  }
+
+  @Patch('my-courses/:courseId/complete-lesson')
+  @ApiOperation({
+    summary: 'Customer can complete a lesson in my course'
+  })
+  @ApiBearerAuth()
+  @Sides(UserSide.CUSTOMER)
+  @UseGuards(JwtAuthGuard.ACCESS_TOKEN, SidesGuard)
+  @ApiOkResponse({ type: SuccessDataResponse })
+  @ApiParam({ name: 'courseId' })
+  completeLesson(
+    @Request() req,
+    @Param('courseId', ParseObjectIdPipe) courseId: string,
+    @Body() completeLessonCourseDto: CompleteLessonCourseDto
+  ) {
+    const condition = { customer: get(req, 'user._id'), 'course._id': new Types.ObjectId(courseId) }
+    return this.courseService.completeLessonCourse(condition, completeLessonCourseDto)
   }
 }
