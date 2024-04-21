@@ -9,6 +9,7 @@ import { CartModule } from '@cart/cart.module'
 import { ProductModule } from '@product/product.module'
 import { OrderProviderController } from '@order/controllers/provider.controller'
 import { CourseModule } from '@course/course.module'
+import { OrderAdminController } from './controllers/admin.controller'
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { CourseModule } from '@course/course.module'
     ProductModule,
     CourseModule
   ],
-  controllers: [OrderCustomerController, OrderProviderController],
+  controllers: [OrderCustomerController, OrderProviderController, OrderAdminController],
   providers: [OrderService, OrderRepository],
   exports: [OrderService, OrderRepository]
 })

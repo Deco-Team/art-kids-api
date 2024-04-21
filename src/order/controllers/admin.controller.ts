@@ -13,36 +13,23 @@ import { CreateMomoPaymentResponseDto } from '@payment/dto/momo-payment.dto'
 import { Sides } from '@auth/decorators/sides.decorator'
 import { SidesGuard } from '@auth/guards/sides.guard'
 
-@ApiTags('Order - Customer')
+@ApiTags('Order - Admin')
 @ApiBearerAuth()
 @ApiBadRequestResponse({ type: ErrorResponse })
-@Sides(UserSide.CUSTOMER)
+@Sides(UserSide.ADMIN)
 @UseGuards(JwtAuthGuard.ACCESS_TOKEN, SidesGuard)
-@Controller('customer')
-export class OrderCustomerController {
+@Controller('admin')
+export class OrderAdminController {
   constructor(private readonly orderService: OrderService) {}
-
-  @Post()
-  @ApiOperation({
-    summary: 'Create new order(orderStatus: PENDING, transactionStatus: DRAFT)'
-  })
-  // @ApiOkResponse({ type: CreateMomoPaymentResponseDto })
-  @ApiOkResponse({ type: SuccessDataResponse })
-  async createOrder(@Req() req, @Body() createOrderDto: CreateOrderDto) {
-    createOrderDto.customer = _.get(req, 'user._id')
-    const result = await this.orderService.createOrder(createOrderDto)
-    return result
-  }
 
   @Get()
   @ApiOperation({
-    summary: 'Customer can view order list'
+    summary: 'Admin can view order list'
   })
   @ApiOkResponse({ type: OrderPaginateResponseDto })
   @ApiQuery({ type: PaginationQuery })
-  async getOrders(@Req() req, @Pagination() paginationParams: PaginationParams) {
-    const customerId = _.get(req, 'user._id')
-    return await this.orderService.getOrderListByCustomer({ customer: customerId }, paginationParams)
+  async getOrders(@Pagination() paginationParams: PaginationParams) {
+    return await this.orderService.getOrderListByAdmin({}, paginationParams)
   }
 
   @Get(':orderId')
@@ -50,8 +37,7 @@ export class OrderCustomerController {
     summary: 'Customer can view order detail'
   })
   @ApiOkResponse({ type: DataResponse(OrderDto) })
-  async getPurchaseDetails(@Req() req, @Param('orderId') orderId: string) {
-    const customerId = _.get(req, 'user._id')
-    return await this.orderService.getOrderDetailByCustomer({ customer: customerId, _id: orderId })
+  async getPurchaseDetails(@Param('orderId') orderId: string) {
+    return await this.orderService.getOrderDetailByAdmin({ _id: orderId })
   }
 }
