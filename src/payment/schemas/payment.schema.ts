@@ -29,8 +29,8 @@ export class Payment {
   @Prop({ type: Object })
   transaction: Object
 
-  @Prop({ type: [Object] })
-  transactionHistory: Object[]
+  // @Prop({ type: [Object] })
+  // transactionHistory: Object[]
 
   @Prop({
     enum: PaymentMethod,

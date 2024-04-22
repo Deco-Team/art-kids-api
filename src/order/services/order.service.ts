@@ -169,43 +169,46 @@ export class OrderService {
       })
 
       // 3. Process transaction
-      // let createMomoPaymentResponse: CreateMomoPaymentResponse
-      // switch (createOrderDto?.paymentMethod) {
-      //   case PaymentMethod.ZALO_PAY:
-      //   // implement later
-      //   case PaymentMethod.MOMO:
-      //   default:
-      //     this.paymentService.setStrategy(this.paymentService.momoPaymentStrategy)
-      //     const createMomoPaymentDto: CreateMomoPaymentDto = {
-      //       partnerName: 'ARTKIDS',
-      //       orderInfo: `ArtKids - Thanh toán đơn hàng #${orderNumber}`,
-      //       redirectUrl: `${this.configService.get('WEB_URL')}/customer/orders`,
-      //       ipnUrl: `${this.configService.get('SERVER_URL')}/payment/webhook`,
-      //       requestType: 'payWithMethod',
-      //       amount: totalAmount,
-      //       orderId: orderNumber,
-      //       requestId: orderNumber,
-      //       extraData: '',
-      //       autoCapture: true,
-      //       lang: 'vi',
-      //       orderExpireTime: 15
-      //     }
-      //     createMomoPaymentResponse = await this.paymentService.createTransaction(createMomoPaymentDto)
-      //     break
-      // }
+      let createMomoPaymentResponse: CreateMomoPaymentResponse
+      createOrderDto['paymentMethod'] = PaymentMethod.MOMO
+      switch (createOrderDto['paymentMethod']) {
+        // case PaymentMethod.ZALO_PAY:
+        // // implement later
+        case PaymentMethod.MOMO:
+        default:
+          this.paymentService.setStrategy(this.paymentService.momoPaymentStrategy)
+          console.log(`${this.configService.get('SERVER_URL')}/payment/webhook`)
+          console.log(`${this.configService.get('WEB_URL')}/order-status`)
+          const createMomoPaymentDto: CreateMomoPaymentDto = {
+            partnerName: 'ARTKIDS',
+            orderInfo: `ArtKids - Thanh toán đơn hàng #${orderNumber}`,
+            redirectUrl: `${this.configService.get('WEB_URL')}/order-status`,
+            ipnUrl: `${this.configService.get('SERVER_URL')}/payment/webhook`,
+            requestType: 'captureWallet',
+            amount: totalAmount,
+            orderId: orderNumber,
+            requestId: orderNumber,
+            extraData: '',
+            autoCapture: true,
+            lang: 'vi',
+            orderExpireTime: 15
+          }
+          createMomoPaymentResponse = await this.paymentService.createTransaction(createMomoPaymentDto)
+          break
+      }
 
       // 4. Create payment
-      // const payment = await this.paymentRepository.create(
-      //   {
-      //     transactionStatus: TransactionStatus.DRAFT,
-      //     transaction: createMomoPaymentResponse,
-      //     paymentMethod: createOrderDto.paymentMethod,
-      //     amount: totalAmount
-      //   },
-      //   {
-      //     session
-      //   }
-      // )
+      const payment = await this.paymentRepository.create(
+        {
+          transactionStatus: TransactionStatus.DRAFT,
+          transaction: createMomoPaymentResponse,
+          paymentMethod: createOrderDto['paymentMethod'],
+          amount: totalAmount
+        },
+        {
+          session
+        }
+      )
 
       // 5. Create customer courses
       await this.customerCourseRepository.model.insertMany(customerCourses, {
@@ -218,8 +221,8 @@ export class OrderService {
           ...createOrderDto,
           orderNumber,
           items: orderItems,
-          totalAmount
-          // payment
+          totalAmount,
+          payment
         },
         {
           session
@@ -227,8 +230,7 @@ export class OrderService {
       )
 
       await session.commitTransaction()
-      // return createMomoPaymentResponse
-      return new SuccessResponse(true)
+      return createMomoPaymentResponse
     } catch (error) {
       await session.abortTransaction()
       console.error(error)

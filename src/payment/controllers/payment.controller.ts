@@ -37,37 +37,37 @@ export class PaymentController {
   //   return this.paymentService.getPaymentList({}, paginationParams)
   // }
 
-  // @ApiOperation({
-  //   summary: 'Webhook Handler for Instant Payment Notification (MOMO)'
-  // })
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // @Post('webhook')
-  // webhook(@Body() momoPaymentResponseDto) {
-  //   console.log('Handling webhook', JSON.stringify(momoPaymentResponseDto))
+  @ApiOperation({
+    summary: 'Webhook Handler for Instant Payment Notification (MOMO)'
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('webhook')
+  webhook(@Body() momoPaymentResponseDto) {
+    console.log('Handling webhook', JSON.stringify(momoPaymentResponseDto))
 
-  //   // TODO: 1. Validate signature with other data => implement later
-  //   const {
-  //     partnerCode,
-  //     amount,
-  //     extraData,
-  //     message,
-  //     orderId,
-  //     orderInfo,
-  //     orderType,
-  //     requestId,
-  //     payType,
-  //     responseTime,
-  //     resultCode,
-  //     transId
-  //   } = momoPaymentResponseDto
-  //   const rawSignature = `accessKey=${this.config.accessKey}&amount=${amount}&extraData=${extraData}&message=${message}&orderId=${orderId}&orderInfo=${orderInfo}&orderType=${orderType}&partnerCode=${partnerCode}&payType=${payType}&requestId=${requestId}&responseTime=${responseTime}&resultCode=${resultCode}&transId=${transId}`
-  //   const signature = this.helperService.createSignature(rawSignature, this.config.secretKey)
+    // TODO: 1. Validate signature with other data => implement later
+    const {
+      partnerCode,
+      amount,
+      extraData,
+      message,
+      orderId,
+      orderInfo,
+      orderType,
+      requestId,
+      payType,
+      responseTime,
+      resultCode,
+      transId
+    } = momoPaymentResponseDto
+    const rawSignature = `accessKey=${this.config.accessKey}&amount=${amount}&extraData=${extraData}&message=${message}&orderId=${orderId}&orderInfo=${orderInfo}&orderType=${orderType}&partnerCode=${partnerCode}&payType=${payType}&requestId=${requestId}&responseTime=${responseTime}&resultCode=${resultCode}&transId=${transId}`
+    const signature = this.helperService.createSignature(rawSignature, this.config.secretKey)
 
-  //   console.log(`1. ${momoPaymentResponseDto.signature}`)
-  //   console.log(`2. ${signature}`)
-  //   if (momoPaymentResponseDto.signature !== signature) return false
-  //   return this.paymentService.processWebhook(momoPaymentResponseDto)
-  // }
+    console.log(`1. ${momoPaymentResponseDto.signature}`)
+    console.log(`2. ${signature}`)
+    if (momoPaymentResponseDto.signature !== signature) return false
+    return this.paymentService.processWebhook(momoPaymentResponseDto)
+  }
 
   // @ApiOperation({
   //   summary: 'Query payment order'

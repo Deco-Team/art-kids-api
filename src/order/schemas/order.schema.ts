@@ -119,9 +119,9 @@ export class Order {
   })
   transactionStatus: TransactionStatus
 
-  // @ApiProperty()
-  // @Prop({ type: Payment })
-  // payment: Payment
+  @ApiProperty()
+  @Prop({ type: Payment })
+  payment: Payment
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order)
