@@ -10,19 +10,17 @@ import { MomoPaymentStrategy } from '@payment/strategies/momo.strategy'
 import { InjectConnection } from '@nestjs/mongoose'
 import { Connection, FilterQuery, Types } from 'mongoose'
 import { OrderRepository } from '@order/repositories/order.repository'
-import { CartService } from '@cart/services/cart.service'
-import { ProductRepository } from '@product/repositories/product.repository'
 import { PaymentRepository } from '@payment/repositories/payment.repository'
 import { AppException } from '@common/exceptions/app.exception'
 import { Errors } from '@common/contracts/error'
-import { OrderHistoryDto } from '@order/schemas/order.schema'
-import { CourseStatus, OrderStatus, TransactionStatus, UserRole } from '@common/contracts/constant'
+import { CourseStatus, OrderStatus, TransactionStatus } from '@common/contracts/constant'
 import { MomoResultCode } from '@payment/contracts/constant'
 import { PaginationParams } from '@common/decorators/pagination.decorator'
 import { Payment } from '@payment/schemas/payment.schema'
 import { MailerService } from '@nestjs-modules/mailer'
 import { CustomerRepository } from '@customer/repositories/customer.repository'
 import { CourseRepository } from '@course/repositories/course.repository'
+import { CustomerCourseRepository } from '@course/repositories/customer-course.repository'
 
 @Injectable()
 export class PaymentService {
@@ -33,7 +31,7 @@ export class PaymentService {
     private readonly orderRepository: OrderRepository,
     private readonly customerRepository: CustomerRepository,
     private readonly courseRepository: CourseRepository,
-    private readonly productRepository: ProductRepository,
+    private readonly customerCourseRepository: CustomerCourseRepository,
     private readonly paymentRepository: PaymentRepository,
     readonly momoPaymentStrategy: MomoPaymentStrategy,
     private readonly mailerService: MailerService
@@ -101,7 +99,7 @@ export class PaymentService {
           },
           {
             $set: {
-              OrderStatus: OrderStatus.COMPLETED,
+              orderStatus: OrderStatus.COMPLETED,
               transactionStatus: TransactionStatus.CAPTURED,
               'payment.transactionStatus': TransactionStatus.CAPTURED,
               'payment.transaction': momoPaymentResponseDto
@@ -112,7 +110,7 @@ export class PaymentService {
           }
         )
 
-        // 2  Update payment transactionStatus, transaction
+        // 2. Update payment transactionStatus, transaction
         await this.paymentRepository.findOneAndUpdate(
           {
             _id: order.payment._id
@@ -127,12 +125,7 @@ export class PaymentService {
             session
           }
         )
-        // 9. Send email/notification to customer
-        const customer = await this.customerRepository.findOne({
-          conditions: {
-            _id: order.customer
-          }
-        })
+
         const courseIds = order.items.map((item) => new Types.ObjectId(item.course))
         const courses = await this.courseRepository.findMany({
           conditions: {
@@ -140,6 +133,30 @@ export class PaymentService {
               $in: courseIds
             },
             status: CourseStatus.PUBLISHED
+          }
+        })
+
+        // 5. Create customer courses
+        const customerCourses = []
+        courses.forEach((course) => {
+          customerCourses.push({
+            customer: order.customer,
+            course: {
+              ...course.toJSON(),
+              lessons: course.toJSON().lessons.map((lesson) => {
+                return { ...lesson, isCompleted: false }
+              })
+            }
+          })
+        })
+        await this.customerCourseRepository.model.insertMany(customerCourses, {
+          session
+        })
+
+        // 9. Send email/notification to customer
+        const customer = await this.customerRepository.findOne({
+          conditions: {
+            _id: order.customer
           }
         })
         await this.mailerService.sendMail({
@@ -166,6 +183,7 @@ export class PaymentService {
           },
           {
             $set: {
+              orderStatus: OrderStatus.PENDING,
               transactionStatus: TransactionStatus.ERROR,
               'payment.transactionStatus': TransactionStatus.ERROR,
               'payment.transaction': momoPaymentResponseDto,

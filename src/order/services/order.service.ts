@@ -153,19 +153,9 @@ export class OrderService {
       const orderNumber = `ARTKIDS${new Date().getTime()}${Math.floor(Math.random() * 100)}`
       let totalAmount = 0
       const orderItems: OrderItemDto[] = []
-      const customerCourses = []
       courses.forEach((course) => {
         totalAmount += course.price
         orderItems.push({ course: course._id, price: course.price })
-        customerCourses.push({
-          customer: createOrderDto.customer,
-          course: {
-            ...course.toJSON(),
-            lessons: course.toJSON().lessons.map((lesson) => {
-              return { ...lesson, isCompleted: false }
-            })
-          }
-        })
       })
 
       // 3. Process transaction
@@ -210,12 +200,7 @@ export class OrderService {
         }
       )
 
-      // 5. Create customer courses
-      await this.customerCourseRepository.model.insertMany(customerCourses, {
-        session
-      })
-
-      // 6. Create order
+      // 5. Create order
       await this.orderRepository.create(
         {
           ...createOrderDto,
