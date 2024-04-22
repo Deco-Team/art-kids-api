@@ -1,11 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { DataResponse, PaginateResponse } from '@src/common/contracts/openapi-builder'
-import { ArrayMinSize, IsMongoId, IsNotEmpty, MaxLength, MinLength, ValidateNested } from 'class-validator'
+import { ArrayMinSize, IsEnum, IsMongoId, IsNotEmpty, MaxLength, MinLength, ValidateNested } from 'class-validator'
 import { OrderHistoryDto, OrderItemDto } from '@order/schemas/order.schema'
 import { Type } from 'class-transformer'
 import { OrderStatus, TransactionStatus } from '@src/common/contracts/constant'
 // import { PaymentMethod } from '@payment/contracts/constant'
 import { PaymentDto } from '@payment/dto/payment.dto'
+import { PaymentMethod } from '@payment/contracts/constant'
 
 export class CreateOrderItemDto {
   @ApiProperty()

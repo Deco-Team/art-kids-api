@@ -63,6 +63,8 @@ export class CreateMomoPaymentResponse {
   payUrl: string
   @ApiProperty()
   shortLink: string
+  @ApiProperty()
+  deeplink: string
 }
 export class CreateMomoPaymentResponseDto extends DataResponse(CreateMomoPaymentResponse) {}
 

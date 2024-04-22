@@ -8,8 +8,9 @@ import { HttpModule } from '@nestjs/axios'
 import { ZaloPayPaymentStrategy } from '@payment/strategies/zalopay.strategy'
 import { MomoPaymentStrategy } from '@payment/strategies/momo.strategy'
 import { OrderModule } from '@order/order.module'
-import { CartModule } from '@cart/cart.module'
 import { ProductModule } from '@product/product.module'
+import { CustomerModule } from '@customer/customer.module'
+import { CourseModule } from '@course/course.module'
 
 @Global()
 @Module({
@@ -17,8 +18,9 @@ import { ProductModule } from '@product/product.module'
     MongooseModule.forFeature([{ name: Payment.name, schema: PaymentSchema }]),
     HttpModule,
     OrderModule,
-    CartModule,
-    ProductModule
+    CustomerModule,
+    ProductModule,
+    CourseModule
   ],
   controllers: [PaymentController],
   providers: [PaymentService, PaymentRepository, ZaloPayPaymentStrategy, MomoPaymentStrategy],

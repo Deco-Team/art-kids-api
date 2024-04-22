@@ -26,8 +26,7 @@ export class OrderCustomerController {
   @ApiOperation({
     summary: 'Create new order(orderStatus: PENDING, transactionStatus: DRAFT)'
   })
-  // @ApiOkResponse({ type: CreateMomoPaymentResponseDto })
-  @ApiOkResponse({ type: SuccessDataResponse })
+  @ApiOkResponse({ type: CreateMomoPaymentResponseDto })
   async createOrder(@Req() req, @Body() createOrderDto: CreateOrderDto) {
     createOrderDto.customer = _.get(req, 'user._id')
     const result = await this.orderService.createOrder(createOrderDto)
